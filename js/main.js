@@ -38,44 +38,45 @@ function buttonClick(e) {
             renderDisplay(inputOne)
             inputTwo = '0'
         }
+
         operator = e.target.innerText;
 
-        if (e.target.innerText === 'C') {
+        if (inputTarget === 'C') {
             init()
+        }
+        if (e.target.innerText === '±') {
+            polarity()
         }
         
     }
-    
     function inputString(input) {
-        
-        input = input + inputTarget
-        
-        if (!input.includes('.')){
-        
-            input = parseInt(input)
-            
-        } // else if (input.includes('.')) {
-        
-        //     input = parseFloat(input)
-        // }
-    
-        return input
+        if (input === '0') {
+            if (inputTarget === '.') return '0.'
+            return inputTarget
+        } else return input + inputTarget
     }
-
-
-}
-
+    
+    }
+    function polarity(){
+        if (inputTwo === '0') {
+            inputOne = inputOne*(-1)
+            renderDisplay(inputOne)
+        } else {
+            inputTwo = inputTwo*(-1)
+            renderDisplay(inputTwo)
+        }
+    }
 
 function output(){
     switch (operator) {
         case '+':
-            return inputOne + inputTwo
+            return parseFloat(inputOne + inputTwo)
         case '-':
-            return inputOne - inputTwo
+            return parseFloat(inputOne - inputTwo)
         case '*':
-            return inputOne * inputTwo
+            return parseFloat(inputOne * inputTwo)
         case '/':
-            return inputTwo !== 0 ? inputOne / inputTwo : '0'
+            return inputTwo !== 0 ? parseFloat(inputOne / inputTwo) : '0'
     }
 }
 
