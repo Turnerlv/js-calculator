@@ -1,0 +1,26 @@
+Pseudocode for calculator
+
+Step 01 - Setup the calculator
+    Sub 01.01 Setup the input/output display
+        - Variable for output of calculator
+        - Starts at "0"
+    Sub 01.02 Setup the input#1
+        - Variable for the first number selected OR pressed on the keyboard
+        - Starts at 'null'
+    Sub 01.03 Setup the operator
+        - Variable for the selected or pressed operator
+    Sub 01.04 Setup the input#2
+        - Variable for the second number selected OR pressed on the keyboard
+        - Starts at 'null'
+Step 02 - Gather the first input
+    Sub 02.01 When the user presses buttons/keystroke of integers, assign values in sequence to input#1
+    Sub 02.02 Display value of input to display as they are entered
+Step 03 - Gather the operator
+    Sub 03.01 When the user selects buttons/keystrokes of accepted operators, assign value to operator Variable
+    Sub 03.02 If another operator is selected, replace the current operator value
+Step 04 - Gather the second number
+    Sub 04.01 When the user presses buttons/keystroke of integers, assign values in sequence to input#1
+    Sub 04.02 Display value of input to display as they are entered
+Step 05 - Calculate the result
+    Sub 05.01 When the user clicks any operator, display the result of input#1 & input#2 using the operator to display
+    Sub 05.02 If the user selects another operator, repeat Step 03
