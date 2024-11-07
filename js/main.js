@@ -3,6 +3,7 @@ const buttonsCalc = document.querySelector('.buttons')
 const outputCalc = document.querySelector('.display')
 
 buttonsCalc.addEventListener('click', buttonClick)
+document.addEventListener('keyup', buttonClick)
 
 /*-----------Model-----------*/
 
@@ -22,10 +23,10 @@ function buttonClick(e) {
 
     if (idx[0].contains(e.target)) {
 
-        if (!operator){
+        if (!operator){ //first input
             inputOne = inputString(inputOne)
             renderDisplay(inputOne)
-        } else if (operator){
+        } else if (operator){ //second input
             inputTwo = inputString(inputTwo) 
             renderDisplay(inputTwo)  
         }
@@ -39,12 +40,12 @@ function buttonClick(e) {
             inputTwo = '0'
         }
 
-        operator = e.target.innerText;
+        operator = inputTarget;
 
         if (inputTarget === 'C') {
             init()
         }
-        if (e.target.innerText === '±') {
+        if (inputTarget === '±') {
             polarity()
         }
         
@@ -55,7 +56,7 @@ function buttonClick(e) {
             return inputTarget
         } else return input + inputTarget
     }
-    
+
     }
     function polarity(){
         if (inputTwo === '0') {
@@ -66,11 +67,17 @@ function buttonClick(e) {
             renderDisplay(inputTwo)
         }
     }
+    // function backspace(input){
+    //     input = input.substring(0, input.length -1)
+    //     if (input.length < 1) input = 0
+    //     renderDisplay(input)
+    //     return input
+    // }
 
 function output(){
     switch (operator) {
         case '+':
-            return parseFloat(inputOne + inputTwo)
+            return parseFloat(inputOne) + parseFloat(inputTwo)
         case '-':
             return parseFloat(inputOne - inputTwo)
         case '*':
