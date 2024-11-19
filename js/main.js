@@ -8,14 +8,16 @@ document.addEventListener('keyup', buttonClick)
 /*-----------Model-----------*/
 
 //State variables
-let inputOne, inputTwo, operator
+let mainInput, storageInput, operator
+const equation = document.querySelector('.equation')
 
 /*----------controller--------*/
 function init() {
-    inputOne = '0'
-    inputTwo = '0'
+    mainInput = '0'
+    storageInput = '0'
     operator = null
-    renderDisplay(inputOne)
+    equation.innerText = ''
+    renderDisplay(mainInput)
 }
 function buttonClick(e) {
     const idx = [...buttonsCalc.children]
@@ -23,74 +25,84 @@ function buttonClick(e) {
 
     if (idx[0].contains(e.target)) {
 
-        if (!operator){ //first input
-            inputOne = inputString(inputOne)
-            renderDisplay(inputOne)
-        } else if (operator){ //second input
-            inputTwo = inputString(inputTwo) 
-            renderDisplay(inputTwo)  
+        
+        if (operator){ //second input
+            
+            if (inputTarget === 'DEL') { storageInput = backspace(storageInput); return }
+
+            storageInput = inputString(storageInput, inputTarget)
+            renderDisplay(storageInput)
+            return
+            //equation.innerText += ` ${storageInput} `
+
         }
+        if (inputTarget === 'DEL') { mainInput = backspace(mainInput); return }
+        mainInput = inputString(mainInput, inputTarget) 
+        renderDisplay(mainInput)
 
     }
     if (idx[1].contains(e.target)){
 
-        if (inputTwo !== '0') {
-            inputOne = output()
-            renderDisplay(inputOne)
-            inputTwo = '0'
-        }
+        if (inputTarget === '±') { mainInput = polarity(mainInput); return }
+        
+        if (storageInput !== '0') {//check for a second input, then calculate
+            if (inputTarget === '±') { storageInput = polarity(storageInput); return }
+            equation.innerText += `${storageInput}`
+            mainInput = output().toString()
+            renderDisplay(mainInput)
+            storageInput = '0'
+        } else equation.innerText += `${mainInput}`
 
         operator = inputTarget;
-
+        equation.innerText += ` ${operator} `
+        
         if (inputTarget === 'C') {
             init()
         }
-        if (inputTarget === '±') {
-            polarity()
-        }
+    }
+    function inputString(currentVal, newDigit) {
+        if (currentVal.includes('.') && newDigit === '.') return currentVal
+        if (currentVal === '0') {
+            if (newDigit === '.') return '0.'
+            return newDigit
+        } else return currentVal + newDigit
+    }
+
+    function polarity(digits){
+        if (parseInt(digits) > 0){
+          digits = '-' + digits  
+        } else if (parseInt(digits) < 0)  digits = digits.substring(1)
+        renderDisplay(digits)
+        return digits
+    }
+    function backspace(digits){
+        
+            if (digits.length > 1) {
+                digits = digits.substring(0, digits.length -1)
+            }else if (digits.length <= 1) digits = '0'
+            renderDisplay(digits)
+            return digits
         
     }
-    function inputString(input) {
-        if (input === '0') {
-            if (inputTarget === '.') return '0.'
-            return inputTarget
-        } else return input + inputTarget
-    }
 
-    }
-    function polarity(){
-        if (inputTwo === '0') {
-            inputOne = inputOne*(-1)
-            renderDisplay(inputOne)
-        } else {
-            inputTwo = inputTwo*(-1)
-            renderDisplay(inputTwo)
+    function output(){
+        switch (operator) {
+            case '+':
+                return parseFloat(mainInput) + parseFloat(storageInput)  
+            case '-':
+                return parseFloat(mainInput) - parseFloat(storageInput)
+            case '*':
+                return parseFloat(mainInput * storageInput)
+            case '/':
+                return storageInput !== '0' ? parseFloat(mainInput / storageInput) : '0'
         }
     }
-    // function backspace(input){
-    //     input = input.substring(0, input.length -1)
-    //     if (input.length < 1) input = 0
-    //     renderDisplay(input)
-    //     return input
-    // }
-
-function output(){
-    switch (operator) {
-        case '+':
-            return parseFloat(inputOne) + parseFloat(inputTwo)
-        case '-':
-            return parseFloat(inputOne - inputTwo)
-        case '*':
-            return parseFloat(inputOne * inputTwo)
-        case '/':
-            return inputTwo !== 0 ? parseFloat(inputOne / inputTwo) : '0'
-    }
 }
-
 /*-------------View------------*/
 
-function renderDisplay(value) {
-    outputCalc.innerText = value
+function renderDisplay(digits) { 
+    digits = digits.toString().slice(0,15)
+    outputCalc.innerText = digits
 }
 
 init()
